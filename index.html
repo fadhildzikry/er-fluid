@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency Fluid Selection — Clinical Reference</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --surface3: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --teal: #39d353;
+    --cyan: #56d364;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* CENTER WRAPPER */
+  .page-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2332 100%);
+    border-bottom: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-radius: 0 0 0 0;
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .header-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #1f6feb, #388bfd);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .header h1 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .header .subtitle { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .disclaimer {
+    background: rgba(248,81,73,0.1);
+    border: 1px solid rgba(248,81,73,0.3);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #ffa198;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    padding: 10px 20px 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    width: 100%;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 8px 14px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.15s;
+    border-radius: 6px 6px 0 0;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CONTENT */
+  .content {
+    padding: 16px 20px;
+    width: 100%;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    min-height: calc(100vh - 120px);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .card-header:hover { background: var(--surface2); }
+  .card-header .badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .card-header h3 { font-size: 14px; font-weight: 600; flex: 1; }
+  .card-header .chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .card.open .chevron { transform: rotate(90deg); }
+  .card-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .card.open .card-body { display: block; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th {
+    background: var(--surface3);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 7px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 7px 10px; border-bottom: 1px solid rgba(48,54,61,0.5); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(56,139,253,0.04); }
+
+  /* ALERTS */
+  .alert {
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    margin: 8px 0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .alert-red { background: rgba(248,81,73,0.1); border-left: 3px solid #f85149; color: #ffa198; }
+  .alert-yellow { background: rgba(210,153,34,0.1); border-left: 3px solid #d29922; color: #e3b341; }
+  .alert-green { background: rgba(63,185,80,0.1); border-left: 3px solid #3fb950; color: #56d364; }
+  .alert-blue { background: rgba(88,166,255,0.1); border-left: 3px solid #58a6ff; color: #79c0ff; }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--muted);
+    margin: 14px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* BADGE COLORS */
+  .bg-blue { background: rgba(88,166,255,0.15); color: #79c0ff; }
+  .bg-green { background: rgba(63,185,80,0.15); color: #56d364; }
+  .bg-yellow { background: rgba(210,153,34,0.15); color: #e3b341; }
+  .bg-red { background: rgba(248,81,73,0.15); color: #ffa198; }
+  .bg-purple { background: rgba(188,140,255,0.15); color: #d2a8ff; }
+  .bg-orange { background: rgba(219,109,40,0.15); color: #ffa657; }
+  .bg-teal { background: rgba(86,211,100,0.15); color: #7ee787; }
+
+  /* FLUID COMPARISON GRID */
+  .fluid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .fluid-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .fluid-card .fluid-name {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--accent2);
+  }
+  .fluid-card .fluid-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 2px 0;
+  }
+  .fluid-card .fluid-row span:last-child { color: var(--text); }
+
+  /* DECISION TREE QUICK REF */
+  .decision-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px 0;
+  }
+  .decision-block .cond {
+    font-size: 12px; font-weight: 700; color: var(--accent2);
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .decision-block ul {
+    list-style: none;
+    padding: 0;
+  }
+  .decision-block ul li {
+    font-size: 12.5px;
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+    color: var(--text);
+  }
+  .decision-block ul li::before {
+    content: "→";
+    position: absolute; left: 0;
+    color: var(--muted);
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10.5px;
+    font-weight: 600;
+    margin: 1px;
+  }
+
+  /* PILLS ROW */
+  .pills { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+
+  /* SUBTEXT */
+  .subtext { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  /* SEARCH */
+  .search-box {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 13px;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-box:focus { border-color: var(--accent); }
+  .search-box::placeholder { color: var(--muted); }
+
+  /* INDICATIONS LIST */
+  .ind-list { margin: 0; padding-left: 18px; }
+  .ind-list li { margin: 3px 0; font-size: 12.5px; }
+
+  /* DOSE BOX */
+  .dose-box {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    margin: 6px 0;
+    color: var(--accent2);
+  }
+
+  @media (max-width: 600px) {
+    .content { padding: 12px 12px; }
+    .fluid-grid { grid-template-columns: 1fr 1fr; }
+    .header { padding: 12px 12px 10px; }
+    .tabs { padding: 8px 12px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+<div class="header">
+  <div class="header-top">
+    <div class="header-icon">💧</div>
+    <div>
+      <h1>Emergency Fluid Selection</h1>
+      <div class="subtitle">Intravenous Fluid Therapy — Clinical Quick Reference</div>
+    </div>
+  </div>
+  <div class="disclaimer">
+    ⚕️ For use by licensed medical professionals only. Clinical judgement and patient context must always guide decisions.
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('overview')">📊 Overview</button>
+  <button class="tab" onclick="switchTab('crystalloids')">🧪 Crystalloids</button>
+  <button class="tab" onclick="switchTab('colloids')">🫧 Colloids</button>
+  <button class="tab" onclick="switchTab('blood')">🩸 Blood Products</button>
+  <button class="tab" onclick="switchTab('scenarios')">🚨 By Scenario</button>
+  <button class="tab" onclick="switchTab('special')">⚠️ Special Populations</button>
+  <button class="tab" onclick="switchTab('ohss')">🥚 OHSS</button>
+  <button class="tab" onclick="switchTab('anaphylaxis')">💉 Anaphylaxis</button>
+  <button class="tab" onclick="switchTab('monitoring')">📈 Monitoring</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="section-label">Fluid Compartment Distribution</div>
+  <div class="fluid-grid">
+    <div class="fluid-card">
+      <div class="fluid-name">Normal Saline (0.9% NaCl)</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>~25%</span></div>
+      <div class="fluid-row"><span>Osmolality</span><span>308 mOsm/L</span></div>
+      <div class="fluid-row"><span>Na⁺</span><span>154 mEq/L</span></div>
+      <div class="fluid-row"><span>Cl⁻</span><span>154 mEq/L</span></div>
+    </div>
+    <div class="fluid-card">
+      <div class="fluid-name">Ringer's Lactate</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>~25%</span></div>
+      <div class="fluid-row"><span>Osmolality</span><span>273 mOsm/L</span></div>
+      <div class="fluid-row"><span>Na⁺</span><span>130 mEq/L</span></div>
+      <div class="fluid-row"><span>Lactate</span><span>28 mEq/L</span></div>
+    </div>
+    <div class="fluid-card">
+      <div class="fluid-name">D5W (5% Dextrose)</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>~8%</span></div>
+      <div class="fluid-row"><span>Osmolality</span><span>252 mOsm/L</span></div>
+      <div class="fluid-row"><span>Effective free water</span><span>~100%</span></div>
+      <div class="fluid-row"><span>Caloric content</span><span>170 kcal/L</span></div>
+    </div>
+    <div class="fluid-card">
+      <div class="fluid-name">HES / Gelatin</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>>80%</span></div>
+      <div class="fluid-row"><span>Osmolality</span><span>~300 mOsm/L</span></div>
+      <div class="fluid-row"><span>Duration</span><span>3–6 hours</span></div>
+      <div class="fluid-row"><span>Coagulation effect</span><span>⚠️ Yes</span></div>
+    </div>
+    <div class="fluid-card">
+      <div class="fluid-name">Albumin 5%</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>>70%</span></div>
+      <div class="fluid-row"><span>Osmolality</span><span>~290 mOsm/L</span></div>
+      <div class="fluid-row"><span>Oncotic pressure</span><span>~20 mmHg</span></div>
+      <div class="fluid-row"><span>Duration</span><span>12–24 hours</span></div>
+    </div>
+    <div class="fluid-card">
+      <div class="fluid-name">pRBC</div>
+      <div class="fluid-row"><span>Intravascular stay</span><span>~100%</span></div>
+      <div class="fluid-row"><span>Hct per unit</span><span>~55–65%</span></div>
+      <div class="fluid-row"><span>Volume / unit</span><span>~250–350 mL</span></div>
+      <div class="fluid-row"><span>Hgb rise / unit</span><span>~1 g/dL</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Quick Decision Framework</div>
+
+  <div class="decision-block">
+    <div class="cond">🔴 Hemorrhagic Shock / Trauma</div>
+    <ul>
+      <li>Control bleeding FIRST (damage control)</li>
+      <li>Permissive hypotension target MAP 50–65 until surgical control</li>
+      <li>Massive transfusion: pRBC : FFP : PLT = 1:1:1</li>
+      <li>Limit crystalloid — each additional liter increases mortality</li>
+    </ul>
+  </div>
+
+  <div class="decision-block">
+    <div class="cond">🟠 Distributive Shock (Sepsis)</div>
+    <ul>
+      <li>Crystalloid bolus 30 mL/kg in first 3 hours (SSC 2021)</li>
+      <li>Prefer balanced solutions (RL, PlasmaLyte) over NS</li>
+      <li>Reassess frequently — avoid fluid overload</li>
+      <li>Add vasopressors if no response after 1–2 L bolus</li>
+    </ul>
+  </div>
+
+  <div class="decision-block">
+    <div class="cond">🟡 Hypovolemic (Non-hemorrhagic)</div>
+    <ul>
+      <li>Isotonic crystalloid as initial resuscitation</li>
+      <li>Consider etiology: vomiting → NS; diarrhea → RL; burns → Parkland</li>
+      <li>Replace ongoing losses with matched fluid type</li>
+    </ul>
+  </div>
+
+  <div class="decision-block">
+    <div class="cond">🟢 Maintenance / Non-urgent</div>
+    <ul>
+      <li>D5 0.45% NaCl + KCl for standard adult maintenance</li>
+      <li>Rate: 25–30 mL/kg/day (adjust for insensible losses)</li>
+      <li>Avoid NS for maintenance — risk hyperchloremic acidosis</li>
+    </ul>
+  </div>
+
+  <div class="alert alert-yellow">
+    ⚠️ <span><b>Rule of Thumb:</b> For every 1 L of crystalloid given, only ~250 mL remains intravascular after 30–60 min. Colloids or blood products are far more efficient for volume expansion.</span>
+  </div>
+
+</div>
+
+<!-- ═══════════════ CRYSTALLOIDS ═══════════════ -->
+<div id="tab-crystalloids" class="tab-panel">
+
+  <!-- NS -->
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">ISO</span>
+      <h3>Normal Saline — 0.9% NaCl (NS)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Composition</div>
+      <table>
+        <tr><th>Electrolyte</th><th>Value</th><th>vs. Plasma</th></tr>
+        <tr><td>Na⁺</td><td>154 mEq/L</td><td>↑ (plasma: 140)</td></tr>
+        <tr><td>Cl⁻</td><td>154 mEq/L</td><td>↑↑ (plasma: 100)</td></tr>
+        <tr><td>Osmolality</td><td>308 mOsm/L</td><td>≈ Isotonic</td></tr>
+        <tr><td>pH</td><td>5.0</td><td>Acidic</td></tr>
+      </table>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Hypochloremic metabolic alkalosis (e.g., prolonged vomiting)</li>
+        <li>Hyponatremia correction</li>
+        <li>Initial resuscitation when RL unavailable</li>
+        <li>Diluent for blood products</li>
+        <li>Hyperkalemia (avoid RL in severe hyperK)</li>
+        <li>Contrast nephropathy prophylaxis</li>
+      </ul>
+
+      <div class="section-label">Avoid / Caution ❌</div>
+      <ul class="ind-list">
+        <li>Large volume resuscitation (risk: hyperchloremic non-anion gap metabolic acidosis)</li>
+        <li>TBI / elevated ICP — avoid if serum Na normal or low</li>
+        <li>Renal failure (high Cl⁻ load, reduces GFR)</li>
+        <li>Sepsis (prefer balanced crystalloids per 2021 SSC)</li>
+      </ul>
+
+      <div class="alert alert-red">
+        ⚠️ <span>High-volume NS → NAGMA (dilutional acidosis). Can mimic lactic acidosis on ABG. Check Cl⁻.</span>
+      </div>
+
+      <div class="dose-box">Standard bolus: 500 mL – 1 L IV over 15–30 min
+Maintenance: calculated based on deficit + ongoing losses</div>
+    </div>
+  </div>
+
+  <!-- Ringer's Lactate -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-green">BALANCED</span>
+      <h3>Ringer's Lactate (RL / LR)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Composition</div>
+      <table>
+        <tr><th>Electrolyte</th><th>Value</th><th>vs. Plasma</th></tr>
+        <tr><td>Na⁺</td><td>130 mEq/L</td><td>↓ slightly</td></tr>
+        <tr><td>K⁺</td><td>4 mEq/L</td><td>≈ Normal</td></tr>
+        <tr><td>Ca²⁺</td><td>2.7 mEq/L</td><td>≈ Normal</td></tr>
+        <tr><td>Cl⁻</td><td>109 mEq/L</td><td>≈ Normal</td></tr>
+        <tr><td>Lactate</td><td>28 mEq/L</td><td>(metabolized → HCO₃⁻)</td></tr>
+        <tr><td>Osmolality</td><td>273 mOsm/L</td><td>Slightly hypotonic</td></tr>
+      </table>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Large-volume resuscitation (trauma, surgery, burns)</li>
+        <li>Sepsis resuscitation (preferred balanced crystalloid)</li>
+        <li>GI losses (diarrhea, fistula, ileostomy)</li>
+        <li>Hypovolemia from any cause</li>
+        <li>Pancreatitis (superior to NS — reduces systemic inflammation)</li>
+        <li>DKA (after initial NS, transition to RL)</li>
+      </ul>
+
+      <div class="section-label">Avoid / Caution ❌</div>
+      <ul class="ind-list">
+        <li>Hyperkalemia (contains K⁺ 4 mEq/L)</li>
+        <li>Blood product co-infusion (Ca²⁺ can cause clotting)</li>
+        <li>Liver failure (impaired lactate metabolism)</li>
+        <li>Do NOT mix with blood products in same line</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>RL contains 4 mEq/L K⁺ — use cautiously in K⁺ >5.5. Lactate in RL is metabolized by liver; not a concern in normal liver function but accumulates in severe hepatic failure.</span>
+      </div>
+
+      <div class="alert alert-blue">
+        💡 <span>SMART trial (2018): Balanced crystalloids (RL/PlasmaLyte) reduced MAKE30 events vs NS in ICU patients. Preferred in sepsis and large-volume resuscitation.</span>
+      </div>
+
+      <div class="dose-box">Sepsis: 30 mL/kg bolus (1–2 L rapid) then reassess
+Burns: Parkland formula — 4 mL × kg × %TBSA over 24h (½ in first 8h)</div>
+    </div>
+  </div>
+
+  <!-- PlasmaLyte -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-teal">BALANCED</span>
+      <h3>PlasmaLyte / Sterofundin ISO</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Composition (PlasmaLyte 148)</div>
+      <table>
+        <tr><th>Electrolyte</th><th>Value</th></tr>
+        <tr><td>Na⁺</td><td>140 mEq/L</td></tr>
+        <tr><td>K⁺</td><td>5 mEq/L</td></tr>
+        <tr><td>Mg²⁺</td><td>3 mEq/L</td></tr>
+        <tr><td>Cl⁻</td><td>98 mEq/L</td></tr>
+        <tr><td>Acetate</td><td>27 mEq/L</td></tr>
+        <tr><td>Gluconate</td><td>23 mEq/L</td></tr>
+        <tr><td>Osmolality</td><td>294 mOsm/L</td></tr>
+        <tr><td>pH</td><td>7.4</td></tr>
+      </table>
+
+      <div class="alert alert-green">
+        ✅ <span>Most physiologically balanced crystalloid available. pH 7.4 = plasma pH. No Ca²⁺, so safe to co-infuse with blood products (unlike RL).</span>
+      </div>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Preferred large-volume resuscitation (especially when RL concerns apply)</li>
+        <li>Post-operative fluid therapy</li>
+        <li>Compatible with blood products (no Ca²⁺ issue)</li>
+        <li>Sepsis resuscitation</li>
+      </ul>
+      <div class="subtext">Availability may be limited in peripheral Indonesian hospitals. RL is the practical equivalent.</div>
+    </div>
+  </div>
+
+  <!-- D5W -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-yellow">HYPO</span>
+      <h3>D5W — 5% Dextrose in Water</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Key Concept</div>
+      <p style="font-size:12.5px; margin:8px 0;">D5W is metabolically equivalent to <b>free water</b> — once glucose is metabolized, only water remains. It distributes equally throughout all body water (ICF + ECF). Only ~8% stays intravascular.</p>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Hypernatremia correction (true free water deficit)</li>
+        <li>Drug dilution / vehicle (adenosine, amiodarone, nitroglycerin)</li>
+        <li>Hypoglycemia (combined with dextrose boost)</li>
+        <li>Maintenance when Na is elevated</li>
+      </ul>
+
+      <div class="section-label">Avoid ❌</div>
+      <ul class="ind-list">
+        <li>Resuscitation — ineffective volume expander</li>
+        <li>TBI / stroke (worsens cerebral edema)</li>
+        <li>Diabetes (worsens hyperglycemia)</li>
+        <li>Hyponatremia</li>
+      </ul>
+
+      <div class="alert alert-red">
+        🚫 <span>NEVER use D5W as a resuscitation fluid. Its intravascular expansion is negligible. In TBI, it redistributes water into brain tissue — can be fatal.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hypertonic Saline -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">HYPER</span>
+      <h3>Hypertonic Saline (3% NaCl / 7.5% NaCl)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Available Concentrations</div>
+      <table>
+        <tr><th>Concentration</th><th>Na⁺ (mEq/L)</th><th>Main Use</th></tr>
+        <tr><td>3% NaCl</td><td>513</td><td>Symptomatic hyponatremia, ICP</td></tr>
+        <tr><td>7.5% NaCl</td><td>1283</td><td>TBI resuscitation, refractory ICP</td></tr>
+        <tr><td>23.4% NaCl</td><td>4004</td><td>Cerebral herniation emergency</td></tr>
+      </table>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Severe symptomatic hyponatremia (seizure, coma)</li>
+        <li>Elevated ICP / cerebral edema (TBI)</li>
+        <li>Cerebral herniation (23.4% NaCl preferred)</li>
+        <li>Refractory hemorrhagic shock (7.5% in austere settings)</li>
+      </ul>
+
+      <div class="dose-box">Symptomatic hyponatremia: 3% NaCl 100–150 mL over 10–20 min
+Target: Na rise 4–6 mEq/L in first hour, then slow correction
+ICP: 3% NaCl 1–2 mL/kg bolus IV (target Na 145–155)
+Herniation: 23.4% NaCl 30 mL IV push (central line preferred)</div>
+
+      <div class="alert alert-red">
+        ⚠️ <span><b>Correction rate:</b> Max 10–12 mEq/L/day to prevent osmotic demyelination (central pontine myelinolysis). Faster correction permitted only in first 1–2 hours of acute symptomatic hyponatremia.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ COLLOIDS ═══════════════ -->
+<div id="tab-colloids" class="tab-panel">
+
+  <div class="alert alert-blue">
+    💡 <span>Colloids expand intravascular volume more efficiently than crystalloids but carry higher cost, risk, and limited survival benefit. Consider when crystalloids are insufficient or when oncotic pressure matters.</span>
+  </div>
+
+  <!-- Albumin -->
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">PROTEIN</span>
+      <h3>Albumin (5% and 20–25%)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Property</th><th>5% Albumin</th><th>20–25% Albumin</th></tr>
+        <tr><td>Osmolality</td><td>~290 mOsm/L</td><td>~1500 mOsm/L</td></div>
+        <tr><td>Oncotic pressure</td><td>~20 mmHg</td><td>~70–100 mmHg</td></tr>
+        <tr><td>Volume effect</td><td>Equal to infused volume</td><td>3–5× infused volume (draws in ICF)</td></tr>
+        <tr><td>Duration</td><td>12–24 hours</td><td>12–24 hours</td></tr>
+      </table>
+
+      <div class="section-label">Indications (Evidence-based) ✅</div>
+      <ul class="ind-list">
+        <li><b>Spontaneous Bacterial Peritonitis (SBP):</b> 1.5 g/kg at diagnosis + 1.0 g/kg on day 3 → reduces hepatorenal syndrome</li>
+        <li><b>Large-volume paracentesis (>5L):</b> 6–8 g per liter drained</li>
+        <li><b>Sepsis:</b> 5% albumin acceptable alternative when large volumes of crystalloid needed (ALBIOS trial)</li>
+        <li><b>TBI:</b> 5% albumin NOT recommended (SAFE trial — increased mortality)</li>
+        <li><b>Hepatorenal syndrome:</b> albumin + terlipressin</li>
+        <li><b>Hypoalbuminemia + edema:</b> 20% albumin for oncotic support (with diuretics)</li>
+      </ul>
+
+      <div class="section-label">Do NOT use ❌</div>
+      <ul class="ind-list">
+        <li>Routine resuscitation in place of crystalloids — no mortality benefit + high cost</li>
+        <li>TBI (SAFE trial showed harm)</li>
+        <li>Nutritional support (not a caloric supplement)</li>
+      </ul>
+
+      <div class="dose-box">SBP: 1.5 g/kg IV Day 1, then 1 g/kg Day 3
+LVP: 6-8 g albumin per liter ascites removed (use 20%)
+Sepsis: 200-300 mL 5% albumin as bolus (if crystalloid alternatives needed)</div>
+    </div>
+  </div>
+
+  <!-- HES -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">SYNTHETIC</span>
+      <h3>HES — Hydroxyethyl Starch (Voluven, Tetraspan)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-red">
+        🚫 <span><b>CONTRAINDICATED in sepsis and critical illness.</b> Multiple trials (CHEST, 6S) showed increased AKI and mortality. EMA restricted use; FDA requires black box warning.</span>
+      </div>
+
+      <div class="section-label">Remaining / Limited Indications</div>
+      <ul class="ind-list">
+        <li>Perioperative volume expansion in non-septic surgical patients (limited use)</li>
+        <li>Where rapid volume expansion is needed and other options unavailable</li>
+      </ul>
+
+      <div class="section-label">Contraindications ❌</div>
+      <ul class="ind-list">
+        <li>Sepsis / septic shock (absolute contraindication)</li>
+        <li>Renal impairment / AKI</li>
+        <li>Coagulopathy / bleeding disorders</li>
+        <li>Intracranial / intraspinal surgery</li>
+        <li>Liver failure</li>
+      </ul>
+
+      <div class="subtext">HES impairs von Willebrand factor, prolongs aPTT, and deposits in renal tubular cells — causing osmotic nephropathy. Still available in Indonesia but use with extreme caution.</div>
+    </div>
+  </div>
+
+  <!-- Gelatin -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-yellow">SYNTHETIC</span>
+      <h3>Gelatin-based Colloids (Gelafundin, Haemaccel)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Overview</div>
+      <p style="font-size:12.5px; margin:8px 0;">Gelatin colloids are derived from bovine collagen. They have shorter duration than HES (~3–4 hours) and lower oncotic pressure. Less evidence of AKI than HES, but safety data are less robust than crystalloids.</p>
+
+      <table>
+        <tr><th>Property</th><th>Value</th></tr>
+        <tr><td>Oncotic pressure</td><td>~20–26 mmHg</td></tr>
+        <tr><td>Duration</td><td>3–4 hours</td></tr>
+        <tr><td>Coagulation effect</td><td>Mild dilutional</td></tr>
+        <tr><td>Anaphylaxis risk</td><td>~0.35% (higher than albumin)</td></tr>
+      </table>
+
+      <div class="section-label">Indications</div>
+      <ul class="ind-list">
+        <li>Short-term volume expansion in surgical / perioperative settings</li>
+        <li>Bridge to blood products in hemorrhage when blood not immediately available</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>Haemaccel contains Ca²⁺ — do NOT co-infuse with blood products (risk of clotting in line). Gelafundin is Ca²⁺-free.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dextran -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">POLYSACCHARIDE</span>
+      <h3>Dextran (Dextran 40 / Dextran 70)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:12.5px; margin:8px 0;">Polysaccharide colloids. Largely replaced by other agents. Dextran 40 used primarily as anti-thrombotic / rheological agent, not primarily for volume expansion.</p>
+
+      <div class="section-label">Historical / Current Uses</div>
+      <ul class="ind-list">
+        <li>Dextran 40: Peripheral vascular disease, microvascular surgery (anti-sludging)</li>
+        <li>Dextran 70: Volume expansion (largely replaced)</li>
+      </ul>
+
+      <div class="section-label">Cautions ❌</div>
+      <ul class="ind-list">
+        <li>Anaphylaxis risk (pre-treat with Dextran 1 — "hapten inhibitor")</li>
+        <li>Interferes with cross-matching — draw blood BEFORE administration</li>
+        <li>Coagulopathy at high doses</li>
+        <li>Renal tubular obstruction with Dextran 40</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ BLOOD PRODUCTS ═══════════════ -->
+<div id="tab-blood" class="tab-panel">
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">pRBC</span>
+      <h3>Packed Red Blood Cells</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Volume per unit</td><td>250–350 mL</td></tr>
+        <tr><td>Haematocrit</td><td>55–65%</td></tr>
+        <tr><td>Expected Hgb rise</td><td>~1 g/dL per unit (adult)</td></tr>
+        <tr><td>Storage</td><td>2–6°C, up to 42 days</td></tr>
+        <tr><td>Infusion time</td><td>1–4 hours (emergency: push)</td></tr>
+      </table>
+
+      <div class="section-label">Transfusion Triggers</div>
+      <table>
+        <tr><th>Patient Group</th><th>Hgb Threshold</th></tr>
+        <tr><td>Stable, non-cardiac</td><td>&lt;7 g/dL (restrictive)</td></tr>
+        <tr><td>Active ACS / cardiac disease</td><td>&lt;8 g/dL</td></tr>
+        <tr><td>Post-op / orthopaedic</td><td>&lt;8 g/dL</td></tr>
+        <tr><td>Active hemorrhage / hemodynamic instability</td><td>Clinically guided — transfuse regardless of Hgb</td></tr>
+      </table>
+
+      <div class="alert alert-green">
+        ✅ <span>TRICC, TRISS, FOCUS trials support restrictive strategy (Hgb 7) in stable patients. Liberal strategy NOT associated with better outcomes.</span>
+      </div>
+
+      <div class="section-label">Massive Transfusion Protocol (MTP)</div>
+      <div class="dose-box">Activate MTP when: >10 units pRBC in 24h anticipated, or
+  hemorrhagic shock not responding to initial resuscitation
+
+Ratio: pRBC : FFP : Platelets = 1:1:1
++ Tranexamic acid 1 g IV ASAP (within 3h of injury)
++ Calcium gluconate 1g IV per 4 units pRBC (citrate chelates Ca²⁺)
++ Cryoprecipitate if fibrinogen &lt;1.5 g/L
+Monitor: TEG/ROTEM if available; repeat CBC/coag every 30–60 min</div>
+    </div>
+  </div>
+
+  <!-- FFP -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-yellow">FFP</span>
+      <h3>Fresh Frozen Plasma (FFP)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Volume per unit</td><td>200–250 mL</td></tr>
+        <tr><td>Contents</td><td>All coagulation factors, fibrinogen, albumin</td></tr>
+        <tr><td>Storage</td><td>Frozen: up to 1 year; thawed: 24h at 1–6°C</td></tr>
+        <tr><td>Thaw time</td><td>30 min — anticipate need early!</td></tr>
+      </table>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Massive hemorrhage / MTP (1:1:1 ratio)</li>
+        <li>Coagulopathy with active bleeding (INR >1.5–2.0)</li>
+        <li>Emergency reversal of warfarin (if PCC unavailable)</li>
+        <li>DIC with active bleeding</li>
+        <li>TTP / HUS (plasma exchange)</li>
+        <li>Factor deficiency when specific concentrate unavailable</li>
+      </ul>
+
+      <div class="section-label">Do NOT use for ❌</div>
+      <ul class="ind-list">
+        <li>Volume expansion (no benefit over crystalloid)</li>
+        <li>Nutritional support</li>
+        <li>Prophylactic correction of elevated INR without bleeding</li>
+      </ul>
+
+      <div class="dose-box">Standard dose: 10–15 mL/kg IV (usually 2–4 units)
+MTP: 1 unit FFP per 1 unit pRBC
+Warfarin reversal: 15–20 mL/kg (consider 4F-PCC instead)</div>
+    </div>
+  </div>
+
+  <!-- Platelets -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">PLT</span>
+      <h3>Platelets</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Product</th><th>Volume</th><th>Increment</th></tr>
+        <tr><td>Pooled (random donor, 4–6 units)</td><td>~200–300 mL</td><td>~30–50 × 10⁹/L</td></tr>
+        <tr><td>Apheresis (single donor)</td><td>~200–300 mL</td><td>~30–60 × 10⁹/L</td></tr>
+      </table>
+
+      <div class="section-label">Transfusion Thresholds</div>
+      <table>
+        <tr><th>Clinical Situation</th><th>PLT Threshold</th></tr>
+        <tr><td>Active bleeding + thrombocytopenia</td><td>&lt;50 × 10⁹/L</td></tr>
+        <tr><td>Intracranial hemorrhage</td><td>&lt;100 × 10⁹/L</td></tr>
+        <tr><td>Prophylactic (non-bleeding)</td><td>&lt;10 × 10⁹/L</td></tr>
+        <tr><td>Pre-procedure (lumbar puncture)</td><td>&lt;50 × 10⁹/L</td></tr>
+        <tr><td>Pre-procedure (major surgery)</td><td>&lt;50–80 × 10⁹/L</td></tr>
+      </table>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>Platelets not indicated in TTP or HIT (thrombotic thrombocytopenia) — may worsen thrombosis. Confirm diagnosis before transfusing.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cryoprecipitate -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">CRYO</span>
+      <h3>Cryoprecipitate</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Component</th><th>Content per Unit</th></tr>
+        <tr><td>Fibrinogen</td><td>200–300 mg</td></tr>
+        <tr><td>Factor VIII</td><td>80–120 IU</td></tr>
+        <tr><td>vWF</td><td>High concentration</td></tr>
+        <tr><td>Factor XIII</td><td>Present</td></tr>
+        <tr><td>Volume per unit</td><td>~15–20 mL</td></tr>
+      </table>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Hypofibrinogenemia (&lt;1.5 g/L) with active bleeding</li>
+        <li>Massive transfusion (fibrinogen replacement)</li>
+        <li>DIC with fibrinogen depletion</li>
+        <li>Hemophilia A / vWD (if specific factors unavailable)</li>
+        <li>Postpartum hemorrhage with fibrinogen &lt;2 g/L</li>
+      </ul>
+
+      <div class="dose-box">Dose: 1–1.5 units per 10 kg body weight (usually 8–10 units)
+Target fibrinogen: >1.5–2.0 g/L
+Check fibrinogen 30–60 min post-transfusion</div>
+    </div>
+  </div>
+
+  <!-- PCC -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-teal">PCC</span>
+      <h3>Prothrombin Complex Concentrate (Octaplex, Beriplex)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:12.5px; margin:8px 0;">4-factor PCC contains Factors II, VII, IX, X and Proteins C & S. Preferred over FFP for urgent anticoagulation reversal — faster, lower volume, no thaw delay.</p>
+
+      <div class="section-label">Indications ✅</div>
+      <ul class="ind-list">
+        <li>Emergency warfarin reversal (INR >4 with or without bleeding)</li>
+        <li>Intracranial hemorrhage on anticoagulation</li>
+        <li>Life-threatening bleeding on Vitamin K antagonists</li>
+      </ul>
+
+      <div class="dose-box">Warfarin reversal:
+  INR 2–4: 25 IU/kg
+  INR 4–6: 35 IU/kg
+  INR >6: 50 IU/kg
+Max dose: 3000 IU (150 mL)
+Always co-administer Vitamin K 10 mg IV slow infusion</div>
+
+      <div class="alert alert-blue">
+        💡 <span>PCC reverses warfarin in minutes vs hours for FFP. For life-threatening hemorrhage (ICH), PCC + Vitamin K is the standard of care.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ BY SCENARIO ═══════════════ -->
+<div id="tab-scenarios" class="tab-panel">
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">EMERGENCY</span>
+      <h3>🩸 Hemorrhagic Shock</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Class</th><th>Blood Loss</th><th>HR</th><th>BP</th><th>Fluid Strategy</th></tr>
+        <tr><td>I</td><td>&lt;750 mL</td><td>&lt;100</td><td>Normal</td><td>Crystalloid, observe</td></tr>
+        <tr><td>II</td><td>750–1500 mL</td><td>100–120</td><td>Normal/↓</td><td>Crystalloid ± colloid</td></tr>
+        <tr><td>III</td><td>1500–2000 mL</td><td>120–140</td><td>↓</td><td>Crystalloid + Blood</td></tr>
+        <tr><td>IV</td><td>&gt;2000 mL</td><td>&gt;140</td><td>↓↓</td><td>Activate MTP immediately</td></tr>
+      </table>
+
+      <div class="alert alert-red">
+        🚨 <span><b>Damage Control Resuscitation:</b> Permissive hypotension (MAP 50–65) until hemorrhage control. Minimize crystalloid. 1:1:1 ratio. TXA within 3 hours.</span>
+      </div>
+
+      <div class="dose-box">TXA (Tranexamic Acid): 1 g IV over 10 min → 1 g over 8h
+  (If &gt;3h from injury: TXA may increase mortality — do NOT give)
+Calcium gluconate: 1 g IV per 4 units pRBC
+Consider REBOA / IR for non-compressible hemorrhage</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">SEPSIS</span>
+      <h3>🦠 Septic Shock</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">SSC 2021 Recommendations</div>
+      <ul class="ind-list">
+        <li>Initial: 30 mL/kg IV crystalloid within 3 hours (strong recommendation)</li>
+        <li>Prefer balanced crystalloids (RL or PlasmaLyte) over NS</li>
+        <li>Reassess after each 500 mL bolus (dynamic fluid responsiveness testing)</li>
+        <li>Add norepinephrine if MAP &lt;65 despite 1–2 L fluid</li>
+        <li>Albumin as adjunct if large volumes of crystalloid needed</li>
+      </ul>
+
+      <div class="section-label">Fluid Responsiveness Assessment</div>
+      <ul class="ind-list">
+        <li><b>Passive Leg Raise (PLR):</b> ↑CO >10% = fluid responsive (best dynamic test)</li>
+        <li><b>Pulse pressure variation (PPV):</b> >13% = fluid responsive (mechanical ventilation only)</li>
+        <li><b>POCUS IVC:</b> collapsibility index >50% suggests hypovolemia</li>
+        <li><b>Mini fluid challenge:</b> 100–200 mL rapid bolus → measure response</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>Fluid overload in sepsis = worse outcomes. SMART, BASICS trials favor balanced crystalloids. Do not reflexively give all 30 mL/kg if patient improves earlier — stop when no longer fluid responsive.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-yellow">DKA</span>
+      <h3>🍬 Diabetic Ketoacidosis</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Fluid Protocol</div>
+      <table>
+        <tr><th>Phase</th><th>Fluid</th><th>Rate</th></tr>
+        <tr><td>First hour</td><td>0.9% NS</td><td>1 L/h</td></tr>
+        <tr><td>Next 2–4h</td><td>0.9% NS (or 0.45% if Na normal)</td><td>250–500 mL/h</td></tr>
+        <tr><td>When glucose &lt;200 mg/dL</td><td>D5W + 0.45% NaCl</td><td>150–250 mL/h</td></tr>
+        <tr><td>Add KCl when</td><td>K &lt;5.5 and urine output confirmed</td><td>20–40 mEq/L</td></tr>
+      </table>
+
+      <div class="alert alert-blue">
+        💡 <span>RL may be used after first hour in preference to NS — reduces hyperchloremic acidosis and may speed ketoacidosis resolution (KIDS trial). Add dextrose when glucose &lt;200, not when ketones clear — continue insulin until anion gap closes.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">BURNS</span>
+      <h3>🔥 Burns Resuscitation</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Parkland Formula</div>
+      <div class="dose-box">4 mL × weight (kg) × %TBSA burned = Total volume in 24h (RL)
+  ½ given in first 8h (from time of burn, not arrival)
+  ½ given over next 16h
+
+Modified Brooke: 2 mL × kg × %TBSA (RL) [less fluid-aggressive]
+Children: Galveston formula (5000 mL/m² burned + 2000 mL/m² BSA)</div>
+
+      <div class="section-label">Monitoring Targets</div>
+      <ul class="ind-list">
+        <li>Urine output 0.5–1 mL/kg/h in adults (gold standard)</li>
+        <li>MAP >65 mmHg</li>
+        <li>Adjust rate hourly based on UO — do NOT give extra boluses</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>Parkland often leads to "fluid creep" (overshoot). Consider albumin after 8–12h (0.5 mL/kg/h of 5% albumin) to reduce total crystalloid load in large burns (>40% TBSA).</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">TBI</span>
+      <h3>🧠 Traumatic Brain Injury</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Fluid Principles in TBI</div>
+      <ul class="ind-list">
+        <li>Maintain euvolemia — avoid hypovolemia AND fluid overload</li>
+        <li>Use isotonic fluids ONLY — NS 0.9% preferred</li>
+        <li>AVOID hypotonic fluids (D5W, 0.45% NaCl) — worsen cerebral edema</li>
+        <li>AVOID albumin (SAFE trial — increased mortality in TBI)</li>
+        <li>Target MAP ≥80 mmHg (CPP ≥60 mmHg) — use vasopressors if needed</li>
+        <li>For elevated ICP: Mannitol 0.25–1 g/kg IV OR 3% NaCl 2–3 mL/kg</li>
+      </ul>
+
+      <table>
+        <tr><th>Agent</th><th>Dose</th><th>Notes</th></tr>
+        <tr><td>Mannitol 20%</td><td>0.25–1 g/kg IV over 15–20 min</td><td>Serum Osm &lt;320, avoid hypovolemia</td></tr>
+        <tr><td>3% NaCl</td><td>1–2 mL/kg bolus</td><td>Target Na 145–155</td></tr>
+        <tr><td>23.4% NaCl</td><td>30 mL IV push</td><td>Herniation emergency, central line preferred</td></tr>
+      </table>
+
+      <div class="alert alert-red">
+        🚫 <span>NEVER give D5W or hypotonic saline in TBI. Glucose-free isotonic fluids only. NS is preferred over RL for TBI (RL slightly hypotonic).</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">LIVER</span>
+      <h3>🫁 Liver Failure / SBP / Cirrhosis</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Fluid Principles</div>
+      <ul class="ind-list">
+        <li>Avoid NS — sodium retention worsens ascites</li>
+        <li>Albumin is the colloid of choice in cirrhosis</li>
+        <li>Restrict sodium in IVF (if Na restriction needed)</li>
+        <li>Avoid fluid overload — risk of renal failure and dilutional hyponatremia</li>
+      </ul>
+
+      <div class="section-label">Specific Protocols</div>
+      <div class="dose-box">SBP: Albumin 1.5 g/kg Day 1 + 1 g/kg Day 3
+  (reduces HRS from 30% to 10%)
+
+LVP (>5L drained): Albumin 6–8 g per liter removed (use 20%)
+  (prevents post-paracentesis circulatory dysfunction)
+
+HRS Type 1: Terlipressin 1–2 mg IV q6h + Albumin 1 g/kg/day
+  (target: reversal of HRS or bridge to transplant)</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ SPECIAL POPULATIONS ═══════════════ -->
+<div id="tab-special" class="tab-panel">
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">PEDS</span>
+      <h3>👶 Pediatric Fluid Management</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Maintenance: Holliday-Segar Formula</div>
+      <div class="dose-box">First 10 kg:   4 mL/kg/h
+Next 10 kg:   2 mL/kg/h  (i.e., 10 kg = 40 mL/h base; 20 kg = 60 mL/h)
+Each kg after: 1 mL/kg/h
+
+Example: 25 kg child → 40 + 20 + 5 = 65 mL/h maintenance</div>
+
+      <div class="section-label">Emergency Resuscitation</div>
+      <table>
+        <tr><th>Indication</th><th>Fluid</th><th>Volume</th></tr>
+        <tr><td>Shock</td><td>NS or RL</td><td>10–20 mL/kg bolus, reassess, repeat up to 60 mL/kg</td></tr>
+        <tr><td>Sepsis</td><td>NS or RL</td><td>10–20 mL/kg, titrate to response</td></tr>
+        <tr><td>DKA (mild-mod)</td><td>NS</td><td>10 mL/kg over 1h, then deficit replacement</td></tr>
+        <tr><td>Dengue shock</td><td>NS or Gelatin</td><td>10–20 mL/kg rapid, escalate if no response</td></tr>
+      </table>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span><b>FEAST trial:</b> In African pediatric sepsis, fluid boluses (both NS and albumin) increased 48h mortality compared to no bolus. Caution: this was resource-limited setting without ICU backup. Current guidelines still recommend boluses but titrate carefully.</span>
+      </div>
+
+      <div class="section-label">Dengue Fluid Protocol (WHO 2012)</div>
+      <div class="dose-box">Dengue with warning signs (Gr II/III):
+  NS 10 mL/kg over 1h → reassess
+  If improved: 7 mL/kg/h × 1–2h → 5 → 3 → 1.5 mL/kg/h
+  If HCT rising or unstable: escalate to colloid (gelatin or 5% albumin)
+  Avoid over-hydration → pulmonary edema risk</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">CARDIAC</span>
+      <h3>❤️ Heart Failure / Cardiogenic Shock</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="alert alert-red">
+        🚫 <span><b>Fluid boluses are generally CONTRAINDICATED in decompensated heart failure.</b> Volume loading worsens pulmonary edema and is rarely beneficial.</span>
+      </div>
+
+      <div class="section-label">Principles</div>
+      <ul class="ind-list">
+        <li>Use diuretics (furosemide) — not fluid boluses — for decompensated HF</li>
+        <li>Cardiogenic shock: optimize preload (may be euvolemic or hypervolemic)</li>
+        <li>Small fluid challenge (250 mL) ONLY if clinically hypovolemic</li>
+        <li>Use vasopressors/inotropes, not fluid, for cardiogenic shock</li>
+        <li>POCUS-guided: assess LV function, IVC, B-lines (pulmonary edema) before any fluid</li>
+      </ul>
+
+      <div class="section-label">Drug Restriction for Fluid</div>
+      <ul class="ind-list">
+        <li>Drug diluent: minimize volume — use concentrated preparations</li>
+        <li>IV antibiotics: consider smaller volumes if volume-restricted</li>
+        <li>Maintenance: restrict to 1–1.5 L/day if fluid overloaded</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">RENAL</span>
+      <h3>🫘 Acute Kidney Injury / CKD</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Fluid Selection Principles</div>
+      <ul class="ind-list">
+        <li>Prefer balanced crystalloids (RL, PlasmaLyte) — NS increases AKI risk</li>
+        <li>Avoid HES — causes osmotic nephropathy</li>
+        <li>Monitor K⁺ — avoid K⁺-containing fluids in hyperkalemia</li>
+        <li>Restrict fluid in oliguria/anuric AKI — avoid overload</li>
+        <li>Use small boluses (250 mL) and reassess — dynamic fluid tolerance</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>KDIGO: In AKI prevention, isotonic crystalloid (not NS) is preferred. Avoid nephrotoxic iodinated contrast + NS in at-risk patients. Pre-hydration with NS or NaHCO₃ reduces contrast-induced nephropathy.</span>
+      </div>
+
+      <div class="section-label">Contrast Nephropathy Prevention</div>
+      <div class="dose-box">High-risk patients (CKD, DM, CHF):
+NS 0.9%: 1 mL/kg/h × 12h before + 12h after contrast
+OR
+NaHCO₃ 1.26%: 3 mL/kg/h × 1h before + 1 mL/kg/h × 6h after</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-teal">OB</span>
+      <h3>🤰 Obstetric Emergencies</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Postpartum Hemorrhage (PPH)</div>
+      <div class="dose-box">Crystalloid: 1–2 L RL rapid bolus
+Blood transfusion: pRBC if EBL >1000 mL or Hgb &lt;8 g/dL
+MTP 1:1:1 if massive PPH
+TXA: 1 g IV within 3h of delivery (WOMAN trial — reduces death from bleeding)
+Fibrinogen: target >2 g/L (higher than non-obstetric)</div>
+
+      <div class="section-label">Pre-eclampsia / Eclampsia</div>
+      <ul class="ind-list">
+        <li>Restrict IV fluid — risk of pulmonary edema (leaky capillaries)</li>
+        <li>Maintenance: 80–100 mL/h maximum</li>
+        <li>MgSO₄ seizure prophylaxis: 4–6 g IV load + 1–2 g/h infusion</li>
+        <li>If pulmonary edema develops: furosemide, not more fluid</li>
+      </ul>
+
+      <div class="alert alert-red">
+        ⚠️ <span>Pre-eclampsia: Do NOT give aggressive fluid resuscitation — these patients are already edematous. Max fluid rate ~80 mL/h. Antihypertensives + MgSO₄ are the primary therapy.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">ELDERLY</span>
+      <h3>👴 Elderly / Frail Patients</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <ul class="ind-list">
+        <li>Reduced tolerance for fluid overload — smaller boluses (250 mL) and frequent reassessment</li>
+        <li>Higher risk of delirium with both under-hydration and over-hydration</li>
+        <li>Avoid aggressive sodium correction (higher risk ODS)</li>
+        <li>Lower transfusion threshold may be appropriate: consider Hgb &lt;8 (cardiac comorbidities)</li>
+        <li>Use POCUS to guide fluid decisions when uncertain</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ OHSS ═══════════════ -->
+<div id="tab-ohss" class="tab-panel">
+
+  <div class="alert alert-blue">
+    💡 <span><b>Ovarian Hyperstimulation Syndrome (OHSS)</b> is an iatrogenic complication of ovarian stimulation (ART/IVF). It involves massive third-spacing of fluid driven by VEGF-mediated capillary leak — similar to sepsis physiology but in a different context. Fluid management is counterintuitive and nuanced.</span>
+  </div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">CLASSIFY</span>
+      <h3>🥚 OHSS Classification & Severity</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Grade</th><th>Features</th><th>Management Setting</th></tr>
+        <tr><td><b>Mild</b></td><td>Bloating, mild abdominal pain, ovaries &lt;8 cm, Hct &lt;41%</td><td>Outpatient</td></tr>
+        <tr><td><b>Moderate</b></td><td>Nausea/vomiting, US evidence of ascites, ovaries 8–12 cm, Hct 41–55%</td><td>Close outpatient / ward</td></tr>
+        <tr><td><b>Severe</b></td><td>Tense ascites, oliguria (&lt;300 mL/day), Hct &gt;55%, hyponatremia, thrombosis risk</td><td>Hospital admission</td></tr>
+        <tr><td><b>Critical</b></td><td>Renal failure, ARDS, massive effusions, thromboembolic events, hemodynamic instability</td><td>ICU</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">PATHO</span>
+      <h3>🔬 Pathophysiology — Why Fluid Management is Tricky</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:12.5px; margin:8px 0 10px;">OHSS is driven by <b>VEGF-induced capillary leak</b> — fluid shifts massively from intravascular space into the third space (ascites, pleural, pericardial). Patients are simultaneously:</p>
+      <div class="fluid-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="fluid-card">
+          <div class="fluid-name" style="color:#ffa198;">Intravascularly DRY</div>
+          <div class="fluid-row"><span>Hemoconcentration</span><span>↑ Hct</span></div>
+          <div class="fluid-row"><span>Oliguria</span><span>↓ UO</span></div>
+          <div class="fluid-row"><span>Thrombosis risk</span><span>↑↑</span></div>
+        </div>
+        <div class="fluid-card">
+          <div class="fluid-name" style="color:#e3b341;">Third-Space WET</div>
+          <div class="fluid-row"><span>Ascites</span><span>Massive</span></div>
+          <div class="fluid-row"><span>Pleural effusion</span><span>Possible</span></div>
+          <div class="fluid-row"><span>Pulmonary edema</span><span>Risk if over-fluid</span></div>
+        </div>
+      </div>
+      <div class="alert alert-red" style="margin-top:10px;">
+        🚫 <span><b>Do NOT give large volumes of NS or hypotonic fluids.</b> This worsens third-space expansion, hyponatremia, and ascites without restoring intravascular volume.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-teal">FLUID Rx</span>
+      <h3>💧 Fluid Management in OHSS</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">First-Line: Albumin (Key Agent)</div>
+      <p style="font-size:12.5px; margin:6px 0 8px;">Albumin is the preferred fluid in OHSS — it expands intravascular volume while minimizing third-space expansion. High oncotic pressure reduces capillary leak-driven fluid shift.</p>
+
+      <div class="dose-box">Albumin 25% (Salt-poor): 50–100 g IV (200–400 mL) over 4h
+  → Repeat every 4–12h based on UO, Hct, and symptoms
+
+Albumin 5%: 200–300 mL IV if 25% unavailable
+
+Target: Hct &lt;45%, UO >30 mL/h, resolution of oliguria</div>
+
+      <div class="section-label">Crystalloid Use</div>
+      <ul class="ind-list">
+        <li>Use <b>isotonic balanced crystalloid</b> (RL preferred) for maintenance — NOT NS (avoid Na load worsening hyponatremia)</li>
+        <li>Limit to 1–1.5 L/day if ascites is severe — crystalloid leaks into third space rapidly</li>
+        <li>Small boluses (250 mL) for symptomatic hypotension only — reassess after each</li>
+      </ul>
+
+      <div class="section-label">Colloids</div>
+      <ul class="ind-list">
+        <li>HES: <b>avoid</b> — risk of renal impairment and coagulopathy</li>
+        <li>Gelatin (Gelafundin): acceptable alternative if albumin unavailable — 500 mL IV</li>
+        <li>Dextran 70: used historically but now mostly replaced by albumin</li>
+      </ul>
+
+      <div class="section-label">What to AVOID</div>
+      <ul class="ind-list">
+        <li>Large volume crystalloid — worsens ascites and hyponatremia</li>
+        <li>Diuretics (furosemide) — CONTRAINDICATED unless pulmonary edema — will worsen hemoconcentration and thrombosis risk</li>
+        <li>Paracentesis to treat oliguria — does NOT reliably improve UO; only indicated for respiratory compromise or intractable pain</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span><b>Cabergoline</b> 0.5 mg/day PO × 8 days (started at hCG trigger) reduces early OHSS by downregulating VEGFR-2. Not a fluid treatment, but important to know in the management context.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">MONITOR</span>
+      <h3>📊 Monitoring Parameters in OHSS</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Parameter</th><th>Target / Concern</th><th>Frequency</th></tr>
+        <tr><td>Hematocrit</td><td>Target &lt;45%; &gt;55% = critical</td><td>Q6–12h in severe</td></tr>
+        <tr><td>Urine output</td><td>&gt;30 mL/h; &lt;20 mL/h = oliguria</td><td>Hourly in severe</td></tr>
+        <tr><td>Weight</td><td>Daily — track fluid balance</td><td>Daily</td></tr>
+        <tr><td>Serum Na⁺</td><td>Hyponatremia common (dilutional)</td><td>Q12–24h</td></tr>
+        <tr><td>Serum K⁺</td><td>Monitor — may rise in oliguric AKI</td><td>Q12–24h</td></tr>
+        <tr><td>Creatinine</td><td>AKI marker</td><td>Daily</td></tr>
+        <tr><td>Abdominal girth</td><td>Track ascites progression</td><td>Daily</td></tr>
+        <tr><td>D-dimer / VTE screen</td><td>High thrombosis risk — anticoagulate if severe</td><td>On admission + PRN</td></tr>
+      </table>
+
+      <div class="alert alert-red">
+        🚨 <span><b>Thromboembolism</b> is the leading cause of mortality in OHSS. Start prophylactic LMWH (enoxaparin 40 mg SC daily) in all severe/critical OHSS unless actively bleeding. Continue for up to 3 months if pregnant.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">ICU</span>
+      <h3>🏥 Critical OHSS — ICU Management</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <ul class="ind-list">
+        <li><b>Paracentesis:</b> indicated for respiratory compromise (large ascites/pleural effusion), severe pain, or refractory oliguria — ultrasound-guided preferred</li>
+        <li><b>Pleural tap:</b> only if respiratory failure despite paracentesis</li>
+        <li><b>Dialysis / CRRT:</b> for refractory AKI with fluid overload</li>
+        <li><b>ARDS management:</b> lung-protective ventilation if mechanical ventilation required</li>
+        <li><b>Dopamine (low dose):</b> historical use for renal perfusion — not currently recommended as standard</li>
+      </ul>
+
+      <div class="dose-box">Paracentesis in OHSS:
+  Drain ascites under US guidance
+  No albumin replacement needed per liter (unlike cirrhosis) —
+  albumin is being given for volume expansion, not replacement
+  Re-accumulation expected — repeat as needed for symptoms</div>
+
+      <div class="alert alert-blue">
+        💡 <span>OHSS is self-limiting if not pregnant — resolves in 10–14 days. If pregnancy occurs (especially multifetal), it may be prolonged and more severe due to sustained hCG stimulation.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ ANAPHYLAXIS ═══════════════ -->
+<div id="tab-anaphylaxis" class="tab-panel">
+
+  <div class="alert alert-red">
+    🚨 <span><b>Anaphylaxis is a medical emergency.</b> First-line treatment is EPINEPHRINE — not antihistamines, not steroids, not fluids. IV fluid is a critical adjunct for hypotension but must not delay epinephrine.</span>
+  </div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">FIRST LINE</span>
+      <h3>💉 Immediate Treatment — Epinephrine First</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="dose-box">EPINEPHRINE (ADRENALINE) — Give FIRST, always
+──────────────────────────────────────────────
+IM (preferred route): 0.3–0.5 mg (0.3–0.5 mL of 1:1000)
+  → Anterolateral thigh (vastus lateralis)
+  → May repeat every 5–15 min PRN
+  → Children: 0.01 mg/kg IM (max 0.5 mg)
+
+IV (anaphylactic shock / cardiac arrest):
+  → 0.1 mg (1 mL of 1:10,000) slow IV push
+  → OR infusion: 0.1–1 mcg/kg/min titrate to response
+  → Prepare: 1 mg epi in 100 mL NS = 10 mcg/mL
+
+Nebulized (stridor only, not systemic): 5 mg (5 mL of 1:1000) via nebulizer</div>
+    </div>
+  </div>
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">FLUIDS</span>
+      <h3>💧 Fluid Resuscitation in Anaphylaxis</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Why Fluids Are Needed</div>
+      <p style="font-size:12.5px; margin:6px 0 10px;">Anaphylaxis causes <b>massive vasodilation + capillary leak</b> — leading to distributive shock. Up to 35% of intravascular volume can shift to tissues within minutes. IV fluid corrects relative hypovolemia while epinephrine acts on vasculature.</p>
+
+      <div class="section-label">Fluid Protocol</div>
+      <div class="dose-box">ADULTS:
+  0.9% NS or RL: 1–2 L IV rapid bolus (as fast as possible)
+  Repeat 500 mL boluses every 5–10 min, reassess after each
+  Total: up to 4–6 L may be needed in refractory shock
+
+CHILDREN:
+  NS or RL: 20 mL/kg IV bolus over 5–10 min
+  Repeat up to 3× (60 mL/kg total) if still shocked</div>
+
+      <div class="section-label">Fluid Choice</div>
+      <table>
+        <tr><th>Fluid</th><th>Use in Anaphylaxis</th><th>Notes</th></tr>
+        <tr><td>0.9% NS</td><td>✅ First choice</td><td>Widely available, immediately effective</td></tr>
+        <tr><td>Ringer's Lactate</td><td>✅ Acceptable</td><td>Slightly more physiological; equally effective</td></tr>
+        <tr><td>Albumin 5%</td><td>⚠️ Not first-line</td><td>Consider in refractory shock with hypoalbuminemia</td></tr>
+        <tr><td>Colloids (HES, gelatin)</td><td>❌ Avoid</td><td>Can trigger or worsen anaphylaxis</td></tr>
+        <tr><td>D5W</td><td>❌ Avoid</td><td>Ineffective volume expander</td></tr>
+      </table>
+
+      <div class="alert alert-red">
+        🚫 <span>Colloids (especially dextran, HES, gelatin) can themselves trigger anaphylactic reactions — avoid in anaphylaxis resuscitation. Stick to isotonic crystalloids as IV fluid adjunct.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-yellow">ADJUNCTS</span>
+      <h3>💊 Adjunct Medications (After Epinephrine + Fluids)</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Drug</th><th>Dose</th><th>Role</th><th>Priority</th></tr>
+        <tr><td>Diphenhydramine (CTM)</td><td>25–50 mg IV/IM</td><td>H1-blocker — reduces urticaria/itch</td><td>3rd line</td></tr>
+        <tr><td>Ranitidine / Famotidine</td><td>50 mg IV</td><td>H2-blocker — adjunct</td><td>3rd line</td></tr>
+        <tr><td>Methylprednisolone</td><td>1–2 mg/kg IV (max 125 mg)</td><td>Prevents biphasic reaction</td><td>3rd line</td></tr>
+        <tr><td>Salbutamol nebulizer</td><td>2.5–5 mg NEB</td><td>Bronchospasm refractory to epi</td><td>Adjunct</td></tr>
+        <tr><td>Glucagon</td><td>1–5 mg IV over 5 min</td><td>Refractory shock in β-blocker users</td><td>β-blocker cases</td></tr>
+        <tr><td>Norepinephrine</td><td>0.1–1 mcg/kg/min</td><td>Refractory vasodilation</td><td>ICU, after epi</td></tr>
+        <tr><td>Vasopressin</td><td>0.03–0.04 units/min</td><td>Refractory distributive shock</td><td>Last resort</td></tr>
+      </table>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span><b>β-blocker patients:</b> Anaphylaxis may be refractory to epinephrine. Use glucagon 1–5 mg IV, then consider vasopressin or methoxamine. Higher epi doses may be needed.</span>
+      </div>
+
+      <div class="alert alert-blue">
+        💡 <span><b>Steroids do NOT help in the acute phase.</b> Onset of action is 4–6 hours. They are given to reduce risk of biphasic anaphylaxis (second wave occurring 4–12h later), not for immediate resuscitation.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">REFRACTORY</span>
+      <h3>🔄 Refractory Anaphylaxis / Biphasic Reaction</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Refractory Anaphylaxis (No Response to 2–3 Epi Doses)</div>
+      <div class="dose-box">IV Epinephrine infusion: 0.1–1 mcg/kg/min (titrate to MAP ≥65)
+Add Norepinephrine: 0.1–0.5 mcg/kg/min if hypotension persists
+Consider Vasopressin: 0.03 units/min
+Glucagon (if β-blocker): 1–5 mg IV then 5–15 mcg/min infusion
+Methylene Blue: 1.5–2 mg/kg IV over 20 min (last resort, vasoplegia)</div>
+
+      <div class="section-label">Biphasic Anaphylaxis</div>
+      <ul class="ind-list">
+        <li>Recurrence of symptoms 4–12 hours after initial resolution (up to 72h reported)</li>
+        <li>Incidence: ~5–20% of anaphylaxis cases</li>
+        <li>Observe all severe anaphylaxis patients for minimum <b>6–8 hours</b> in ED</li>
+        <li>If severe index reaction or persistent symptoms: admit for 24h observation</li>
+        <li>Discharge with <b>Epipen prescription</b> and anaphylaxis action plan</li>
+      </ul>
+
+      <div class="section-label">Positioning Matters</div>
+      <ul class="ind-list">
+        <li>Hypotension: supine with legs raised (like PLR)</li>
+        <li>Respiratory distress: sit upright or semi-recumbent</li>
+        <li>Pregnant patient: left lateral decubitus + leg raise</li>
+        <li>Cardiac arrest: CPR — epinephrine still first-line</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-orange">SPECIAL</span>
+      <h3>⚠️ Anaphylaxis in Special Situations</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Situation</th><th>Key Consideration</th></tr>
+        <tr><td>On β-blockers</td><td>Epi may be ineffective — use glucagon, vasopressin, higher epi doses</td></tr>
+        <tr><td>Pregnancy</td><td>Epi safe in pregnancy; left lateral tilt; fetal monitoring; may need emergent C-section in cardiac arrest</td></tr>
+        <tr><td>Pediatric</td><td>Weight-based dosing (0.01 mg/kg IM epi); beware underestimating severity</td></tr>
+        <tr><td>Elderly / CAD</td><td>Epi still indicated — risk of anaphylaxis death &gt; risk of epi-induced arrhythmia</td></tr>
+        <tr><td>ACE-I users</td><td>May have blunted bradykinin breakdown — more severe angioedema; may not respond to antihistamines</td></tr>
+        <tr><td>Perioperative</td><td>Common triggers: NMBDs, latex, antibiotics, gelatin colloids; treat identically</td></tr>
+        <tr><td>Contrast media</td><td>Pre-medicate high-risk patients: prednisolone 50 mg PO 13h, 7h, 1h prior + cetirizine 10 mg 1h prior</td></tr>
+      </table>
+
+      <div class="alert alert-green">
+        ✅ <span><b>Discharge criteria (post-anaphylaxis):</b> Symptom-free for ≥4h (mild) or ≥6–8h (moderate-severe), stable vitals, access to epinephrine, able to return to ED, anaphylaxis plan provided. Never discharge before 4h from last epinephrine dose.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ MONITORING ═══════════════ -->
+<div id="tab-monitoring" class="tab-panel">
+
+  <div class="card open">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-blue">DYNAMIC</span>
+      <h3>📡 Fluid Responsiveness Assessment</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Test</th><th>Method</th><th>Threshold</th><th>Limitations</th></tr>
+        <tr><td>Passive Leg Raise (PLR)</td><td>Raise legs 45°, measure CO/PP change at 1 min</td><td>↑CO >10%</td><td>Needs CO measurement or POCUS</td></tr>
+        <tr><td>Pulse Pressure Variation (PPV)</td><td>Ventilator waveform analysis</td><td>PPV >13%</td><td>Mechanical ventilation only, sinus rhythm</td></tr>
+        <tr><td>Stroke Volume Variation (SVV)</td><td>Arterial line / advanced monitor</td><td>SVV >10–13%</td><td>Controlled ventilation only</td></tr>
+        <tr><td>Mini Fluid Challenge</td><td>100–200 mL rapid → check CO/HR/BP</td><td>↑CO >10%</td><td>Requires CO monitoring</td></tr>
+        <tr><td>IVC Collapsibility (POCUS)</td><td>IVC diameter on US inspiration</td><td>>50% collapse</td><td>Operator-dependent; unreliable with high PEEP</td></tr>
+        <tr><td>End-expiratory Occlusion Test</td><td>15-sec apnea → ↑PP >5%</td><td>>5% PP rise</td><td>Mechanically ventilated only</td></tr>
+      </table>
+
+      <div class="alert alert-green">
+        ✅ <span>PLR is the most validated, non-invasive fluid responsiveness test — valid in spontaneous breathing, arrhythmia, ARDS. Use it whenever feasible before giving additional fluid boluses.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-green">TARGETS</span>
+      <h3>🎯 Resuscitation End-Points</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Parameter</th><th>Target</th><th>Notes</th></tr>
+        <tr><td>MAP</td><td>≥65 mmHg (≥80 in TBI)</td><td>Higher in elderly, chronic HTN</td></tr>
+        <tr><td>Urine output</td><td>0.5 mL/kg/h (adults), 1 mL/kg/h (children)</td><td>Best bedside surrogate for organ perfusion</td></tr>
+        <tr><td>Lactate</td><td>&lt;2 mmol/L; clearance >10–20% per 2h</td><td>Lactate &gt;4 = high mortality; guide resuscitation</td></tr>
+        <tr><td>ScvO₂</td><td>≥70%</td><td>Central venous oxygen saturation</td></tr>
+        <tr><td>Base excess</td><td>&gt;-6 mEq/L</td><td>Worsening deficit = inadequate resuscitation</td></tr>
+        <tr><td>Capillary refill</td><td>&lt;3 seconds</td><td>ANDROMEDA-SHOCK: CRT-guided as good as lactate</td></tr>
+        <tr><td>Skin mottling</td><td>Decreasing</td><td>Mottling score 0–5; guides perfusion assessment</td></tr>
+      </table>
+
+      <div class="alert alert-blue">
+        💡 <span><b>ANDROMEDA-SHOCK (2019):</b> Peripheral perfusion-guided resuscitation (capillary refill time) was non-inferior to lactate-guided resuscitation and resulted in less fluid administration.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-red">DANGER</span>
+      <h3>⚠️ Signs of Fluid Overload</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="section-label">Clinical Features</div>
+      <ul class="ind-list">
+        <li>New or worsening peripheral edema</li>
+        <li>Pulmonary edema — dyspnea, SpO₂ drop, crackles, B-lines on POCUS</li>
+        <li>Rising CVP, distended neck veins</li>
+        <li>Abdominal compartment syndrome — rising bladder pressure, abdominal distension</li>
+        <li>Worsening oxygenation requiring increased FiO₂</li>
+      </ul>
+
+      <div class="section-label">Fluid Overload Management</div>
+      <ul class="ind-list">
+        <li>Stop further fluid administration</li>
+        <li>Furosemide 40–80 mg IV (if euvolemic or hypervolemic)</li>
+        <li>Target negative fluid balance — "de-resuscitation"</li>
+        <li>CRRT in oliguric AKI with fluid overload</li>
+        <li>Albumin 20% + furosemide ("salt-poor albumin strategy") in hypoalbuminaemic patients</li>
+      </ul>
+
+      <div class="alert alert-yellow">
+        ⚠️ <span>Positive cumulative fluid balance is independently associated with worse outcomes in ICU patients (sepsis, ARDS). Aim for zero to negative balance by Day 3 if hemodynamically stable.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="badge bg-purple">LABS</span>
+      <h3>🔬 Key Lab Monitoring During Resuscitation</h3>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Lab</th><th>Frequency</th><th>What to Watch</th></tr>
+        <tr><td>Lactate</td><td>Every 2h until &lt;2</td><td>Clearance; failure to clear → inadequate resuscitation or other etiology</td></tr>
+        <tr><td>ABG / VBG</td><td>Q2–4h in instability</td><td>pH, BE, pCO₂; hyperchloremic acidosis from NS</td></tr>
+        <tr><td>Electrolytes (Na, K, Cl)</td><td>Q4–6h</td><td>Hypernatremia (hypertonic saline), hypokalemia (GI losses)</td></tr>
+        <tr><td>Creatinine / BUN</td><td>Daily or Q12h in AKI</td><td>Fluid-related AKI, response to resuscitation</td></tr>
+        <tr><td>Coagulation (PT, aPTT, fibrinogen)</td><td>Q4–6h in hemorrhage</td><td>DIC, dilutional coagulopathy, guide blood product use</td></tr>
+        <tr><td>CBC (Hb, Hct, PLT)</td><td>Q4–6h in hemorrhage</td><td>Transfusion trigger; thrombocytopenia</td></tr>
+        <tr><td>Ionized Ca²⁺</td><td>Q4h during MTP</td><td>Hypocalcemia from citrate in blood products</td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- end content -->
+</div><!-- end page-wrapper -->
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`#tab-${name}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleCard(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
